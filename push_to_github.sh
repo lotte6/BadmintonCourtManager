@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# BadmintonCourtManager - GitHub Push Script
-# This script helps you push the project to GitHub
+# BadmintonCourtManager - Automated GitHub Push Script
+# This script automatically creates and pushes to GitHub
 
-echo "🏸 BadmintonCourtManager - GitHub Push Setup"
-echo "============================================="
+echo "🏸 BadmintonCourtManager - Automated GitHub Push"
+echo "==============================================="
 echo ""
 
 # Check if we're in a git repository
@@ -19,33 +19,69 @@ echo "- Files ready for GitHub:"
 ls -la *.html *.md 2>/dev/null | grep -v "^total"
 echo ""
 
-echo "🔧 To push to GitHub, follow these steps:"
+# Get GitHub username
+echo "🔧 GitHub Setup:"
+read -p "Enter your GitHub username: " GITHUB_USERNAME
+
+if [ -z "$GITHUB_USERNAME" ]; then
+    echo "❌ Error: GitHub username is required"
+    exit 1
+fi
+
 echo ""
-echo "1. Create a new repository on GitHub:"
-echo "   - Go to https://github.com/new"
-echo "   - Repository name: BadmintonCourtManager"
-echo "   - Description: A comprehensive web-based badminton match management system"
-echo "   - Make it Public or Private (your choice)"
-echo "   - DO NOT initialize with README, .gitignore, or license"
+echo "📝 Repository details:"
+echo "- Name: BadmintonCourtManager"
+echo "- Username: $GITHUB_USERNAME"
+echo "- URL: https://github.com/$GITHUB_USERNAME/BadmintonCourtManager"
 echo ""
 
-echo "2. After creating the repository, run these commands:"
+# Check if remote already exists
+if git remote get-url origin >/dev/null 2>&1; then
+    echo "⚠️  Remote 'origin' already exists. Removing it..."
+    git remote remove origin
+fi
+
+# Add remote
+echo "🔗 Adding GitHub remote..."
+git remote add origin https://github.com/$GITHUB_USERNAME/BadmintonCourtManager.git
+
+# Set main branch
+echo "🌿 Setting main branch..."
+git branch -M main
+
+# Push to GitHub
+echo "🚀 Pushing to GitHub..."
 echo ""
-echo "   git remote add origin https://github.com/YOUR_USERNAME/BadmintonCourtManager.git"
-echo "   git branch -M main"
-echo "   git push -u origin main"
-echo ""
-echo "   (Replace YOUR_USERNAME with your actual GitHub username)"
+echo "Note: You may be prompted for your GitHub credentials."
+echo "If you have 2FA enabled, use a Personal Access Token instead of password."
 echo ""
 
-echo "3. Your repository will be available at:"
-echo "   https://github.com/YOUR_USERNAME/BadmintonCourtManager"
-echo ""
+git push -u origin main
 
-echo "✅ Project is ready for GitHub!"
-echo "📁 All files are committed and ready to push"
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "✅ Successfully pushed to GitHub!"
+    echo "🌐 Repository URL: https://github.com/$GITHUB_USERNAME/BadmintonCourtManager"
+    echo ""
+    echo "📋 Next steps:"
+    echo "1. Visit your repository on GitHub"
+    echo "2. Add repository topics: badminton, sports-management, web-app, javascript"
+    echo "3. Update repository description if needed"
+    echo "4. Share the repository link!"
+else
+    echo ""
+    echo "❌ Failed to push to GitHub"
+    echo "💡 Possible solutions:"
+    echo "1. Make sure the repository exists on GitHub"
+    echo "2. Check your GitHub credentials"
+    echo "3. If you have 2FA, use a Personal Access Token"
+    echo ""
+    echo "🔧 Manual setup:"
+    echo "1. Go to https://github.com/new"
+    echo "2. Create repository: BadmintonCourtManager"
+    echo "3. Run: git push -u origin main"
+fi
 
-# Show current git status
 echo ""
 echo "📊 Current git status:"
 git status --short
